@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+	<select id="login" parameterType="user" resultType="user">
+		select * from user_info where user_account=#{user_account} and user_password=#{user_password}
+	</select>
+	<select id="listAll" parameterType="user" resultType="map">
+		select * from user_info u,role_info r where u.role_id= r.role_id
+	</select>
+	
+	<select id="listLike" parameterType="String" resultType="map">
+		select * from user_info u,role_info r where u.role_id= r.role_id and user_name like #{user_name}
+	</select>
+	<select id="chakan" parameterType="int" resultType="user">
+		select * from user_info where user_id=#{user_id}
+	</select>
+	<insert id="insert" parameterType="user">
+		insert into user_info (user_name,user_sex,user_age,user_salary,user_account,user_password)values
+								(#{user_name},#{user_sex},#{user_age},#{user_salary},#{user_account},#{user_password});
+	</insert>
+	<select id="findById" parameterType="user" resultType="user">
+		select * from user_info where user_id=#{user_id}
+	</select>
+	<update id="update" parameterType="user">
+		update user_info set user_name=#{user_name},user_sex=#{user_sex},user_age=#{user_age},user_salary=#{user_salary},user_account=#{user_account},
+		user_password=#{user_password} where user_id=#{user_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from user_info where user_id=#{user_id}
+	</delete>
+</mapper>

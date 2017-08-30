@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+    http://www.springframework.org/schema/aop 
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+    
+     <context:property-placeholder location="classpath:jdbc.properties"/>
+   		 <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+   		 	<!-- 指定驱动 -->
+    	<property name="driverClass" value="${db.driver}"></property>
+    	<!-- 连接的URL -->
+    	<property name="jdbcUrl" value="${db.url}"></property>
+    	<!-- 用户名 -->
+    	<property name="user" value="${db.username}"></property>
+    	<!-- 密码 -->
+    	<property name="password" value="${db.password}"></property>
+    	<!-- 最大连接数 -->
+    	<property name="maxPoolSize" value="${pool.max}"></property>
+    	<!-- 最小连接数 -->
+    	<property name="minPoolSize" value="${pool.min}"></property>
+    	<!-- 初始化连接数 -->
+    	<property name="initialPoolSize" value="${pool.init}"></property>
+    	<!-- 最大空闲时间:单位s(秒) 0:无限时-->
+    	<property name="maxIdleTime" value="${pool.idle}"></property>
+   		 </bean>
+   	
+   		 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+   		 	<property name="dataSource" ref="dataSource"></property>
+   		 	<property name="configLocation" value="classpath:config.xml"></property>
+   		 </bean>
+   		 <bean id="udao" class="com.zh.dao.impl.UserDaoImpl">
+   		 	<property name="ssf" ref="sqlSessionFactory"></property>
+   		 </bean>
+   		 <bean id="uService" class="com.zh.service.impl.UserServiceImpl">
+   		 	<property name="udao" ref="udao"></property>
+   		 </bean>
+   		 <bean id="uc" class="com.zh.controller.UserController">
+   		 	<property name="uService" ref="uService"></property>
+   		 </bean>
+    </beans>
