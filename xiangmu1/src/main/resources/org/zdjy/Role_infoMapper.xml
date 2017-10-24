@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.Role_infoDao">
+	
+	<select id="findAll" parameterType="Role_info" resultType="Role_info">
+		select * from role_info 
+	</select>
+	<select id="findById" parameterType="int" resultType="Role_info">
+		select * from role_info where role_id=#{role_id}
+	</select>
+	<select id="like" parameterType="String" resultType="Role_info">
+		select * from role_info where role_name like #{role_name}
+	</select>
+	<insert id="insert" parameterType="Role_info">
+		insert into role_info (role_name,role_desc)values(#{role_name},#{role_desc})
+	</insert>
+	<update id="update" parameterType="Role_info">
+		update Role_info set role_name=#{role_name},role_desc=#{role_desc} where role_id=#{role_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from Role_info where role_id=#{role_id}
+	</delete>
+	<delete id="jiashan" parameterType="Role_info">
+		update Role_info set role_mark='0' where role_id=#{role_id}
+	</delete>
+</mapper>

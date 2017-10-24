@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.Expense_accountDao">
+	<!-- 报销单查全 -->
+	<select id="list"  parameterType="Expense_account" resultType="map">
+		select * from expense_account e,user_info us where e.user_id=us.user_id
+		<if test="Mcha!=null">
+			and us.user_name like #{Mcha}
+		</if>
+		<if test="expense_time!=null">
+			and e.expense_time=#{expense_time}
+		</if>
+	</select>
+	<!-- <select id="list"  parameterType="Expense_account" resultType="map">
+		select * from expense_account e,user_info us where e.user_id=us.user_id 
+		<if test="Mcha!=null">
+			and us.user_name like #{Mcha}
+		</if>
+		<if test="expense_time!=null">
+			and e.expense_time=#{expense_time}
+		</if>
+		limit #{currentPage},#{lineSize} 
+	</select> -->
+	<!-- 用于分页 -->
+	<select id="count" resultType="int">
+		select count(*) from expense_account 
+	</select>
+	<!-- 报销单基本信息 -->
+	<select id="findExp" parameterType="Expense_account" resultType="Expense_account">
+			select * from expense_account where expense_id=#{expense_id}
+	</select>
+	<!-- 报销明细 -->
+	<select id="listAll" parameterType="Expense_account" resultType="map">
+			select * from expense_details ed,cost_info ci where ed.cost_id=ci.cost_id and ed.expense_id=#{expense_id}
+	</select>
+	<!-- 报销历史信息 -->
+	<select id="listHistory" parameterType="Expense_account" resultType="map">
+		select * from audit_history ah,expense_account e,user_info us where ah.expense_id=e.expense_id and e.user_id=us.user_id and e.expense_id=#{expense_id}
+	</select>
+	<!-- 报销添加中显示的费用名称 -->
+	<select id="listCos" resultType="map">
+		select * from cost_info ci
+	</select>
+	<!-- 报销单添加 -->
+	<insert id="insertexp"
+		useGeneratedKeys="true" keyProperty="expense_id" parameterType="Expense_account">
+		insert into expense_account(user_id,expense_name,expense_time,expense_total,expense_desc)values(#{user_id},#{expense_name},#{expense_time},#{expense_total},#{expense_desc})
+	</insert>
+	<insert id="insertdet" parameterType="Expense_details">
+		insert into expense_details (expense_id,cost_id,expense_details_amount)values(#{expense_id},#{cost_id},#{expense_details_amount})
+	</insert>
+	<!-- 我的报销单查全 -->
+	<select id="listmyshow" parameterType="String" resultType="map">
+		select * from expense_account e,user_info us where e.user_id=us.user_id and us.user_name=#{name}
+	</select>
+	<!-- 审核全部 -->
+	<select id="JSHlist" resultType="map">
+		select * from user_info us,expense_account a where us.user_id=a.user_id
+	</select>
+	<!-- 审核基本信息 -->
+	<select id="JShenHe" parameterType="Expense_account" resultType="Expense_account">
+		select * from expense_account where expense_id=#{expense_id}
+	</select>
+	<!-- 审核明细 -->
+	<select id="JSHMX" parameterType="int" resultType="map">
+		select * from expense_details ed,cost_info ci where ed.cost_id=ci.cost_id and ed.expense_id=#{id}
+	</select>
+	<!-- 审核描述信息 -->
+	<insert id="SHinsert" parameterType="Audit_history">
+		insert into audit_history (expense_id,user_id,audit_time,audit_state,audit_desc)values(#{expense_id},#{user_id},NOW(),#{audit_state},#{audit_desc});
+	</insert>
+	<!-- 审核描述状态 -->
+	<update id="SHupdate" parameterType="Expense_account">
+		update expense_account set expense_state=#{expense_state} where expense_id=#{expense_id}
+	</update>
+	<!-- 修改报销单基本信息 -->
+	<update id="update" parameterType="Expense_account">
+		update expense_account set expense_name=#{expense_name},expense_desc=#{expense_desc},expense_time=#{expense_time},expense_state='0',expense_total=#{expense_total}where expense_id=#{expense_id}
+	</update>
+	<!-- 修改报销单明细 -->
+	<!-- <update id="updateMx" parameterType="Expense_details">
+		update expense_details set cost_id=#{cost_id},expense_details_amount=#{expense_details_amount} where expense_details_id=#{expense_details_id}
+	</update> -->
+	 <update id="updateMx" parameterType="Expense_details">
+		delete from expense_details where expense_id=#{expense_id}
+	</update>
+</mapper>

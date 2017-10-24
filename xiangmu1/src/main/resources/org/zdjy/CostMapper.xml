@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.CostDao">
+	<select id="listAll" parameterType="Cost_info" resultType="Cost_info">
+		select * from Cost_info 
+	</select>
+	<insert id="insert" parameterType="Cost_info">
+		insert into cost_info (cost_name,cost_desc)values(#{cost_name},#{cost_desc})
+	</insert>
+	<select id="findById" parameterType="int" resultType="Cost_info">
+		select * from cost_info where cost_id=#{id}
+	</select>
+	<update id="update" parameterType="Cost_info">
+		update cost_info set cost_name=#{cost_name},cost_desc=#{cost_desc}where cost_id=#{cost_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		update cost_info set cost_mark='0' where cost_id=#{id}
+	</delete>
+	<select id="like" parameterType="String" resultType="Cost_info">
+		select * from Cost_info where cost_name like #{name}
+	</select>
+</mapper>

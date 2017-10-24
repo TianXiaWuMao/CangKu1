@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.SalaryDao">
+<!-- 薪资的查全 -->
+	<select id="listAll" parameterType="Salary" resultType="map">
+		select * from salary_payment s,user_info u where s.user_id=u.user_id
+	</select>
+	<!-- 薪资添加的单查 -->
+	<select id="findName" resultType="User">
+		select * from user_info
+	</select>
+	<insert id="add" parameterType="Salary">
+		insert into salary_payment (user_id,payment_time,payment_money)values(#{user_id},#{payment_time},#{payment_money})
+	</insert>
+	<select id="like" parameterType="Salary" resultType="map">
+		select * from salary_payment sp,user_info us where sp.user_id=us.user_id and us.user_name like #{Mcha}
+		<if test="payment_time!=null">
+			and payment_time=#{payment_time}
+		</if>
+	</select>
+	<select id="listBao" parameterType="Salary" resultType="Salary">
+		select month(payment_time),payment_money from salary_payment
+	</select>
+</mapper>

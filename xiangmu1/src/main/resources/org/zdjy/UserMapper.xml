@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.UserDao">
+	<select id="login" parameterType="org.zh.entity.User" resultType="org.zh.entity.User">
+		select * from user_info where user_account=#{user_account} and user_password=#{user_password}
+	</select>
+	<select id="listAll" parameterType="org.zh.entity.User" resultType="map">
+		select * from user_info u,role_info r where u.role_id= r.role_id limit #{currentPage},#{lineSize}
+	</select>
+	<select id="listLike" parameterType="User" resultType="map">
+		select * from user_info u,role_info r where u.role_id= r.role_id and user_name like #{user_name} limit #{currentPage},#{lineSize}
+	</select>
+	<select id="chakan" parameterType="int" resultType="org.zh.entity.User">
+		select * from user_info where user_id=#{user_id}
+	</select>
+	<!-- 用于查询用户添加界面的角色的值 -->
+	<select id="findByName" parameterType="org.zh.entity.Role_info" resultType="org.zh.entity.Role_info">
+		select * from role_info GROUP BY role_name
+	</select>
+	<!-- 添加用户信息 -->
+	<insert id="insert" parameterType="org.zh.entity.User">
+		insert into user_info (role_id,user_name,user_sex,user_age,user_salary,user_account,user_password)values
+								(#{role_id},#{user_name},#{user_sex},#{user_age},#{user_salary},#{user_account},#{user_password});
+	</insert>
+	<select id="findById" parameterType="org.zh.entity.User" resultType="org.zh.entity.User">
+		select * from user_info where user_id=#{user_id}
+	</select>
+	<!-- 用于分页的查总条数 -->
+	<select id="count" resultType="int">
+		select count(*) from user_info where user_mark='1'
+	</select>
+	<select id="countCX" parameterType="User" resultType="int">
+		select count(*) from user_info where user_name=#{user_name}
+	</select>
+	<update id="update" parameterType="org.zh.entity.User">
+		update user_info set user_name=#{user_name},user_sex=#{user_sex},user_age=#{user_age},user_salary=#{user_salary},user_account=#{user_account},
+		user_password=#{user_password} where user_id=#{user_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from user_info where user_id=#{user_id}
+	</delete>
+	<delete id="jiashan" parameterType="int">
+		update user_info set user_mark='0' where user_id=#{user_id}
+	</delete>
+</mapper>

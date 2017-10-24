@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.MenuDao">
+	<select id="list" parameterType="Menu_info" resultType="Menu_info">
+		select * from menu_info  
+	</select>
+	<select id="findName" parameterType="Menu_info" resultType="Menu_info">
+		select * from menu_info GROUP BY menu_name
+	</select>
+	<insert id="insert" parameterType="Menu_info">
+		insert into menu_info (prent_menu_id,menu_name,menu_url)values(#{menu_id},#{menu_name},#{menu_url}) 
+	</insert>
+	<select id="findByIdU" parameterType="Menu_info" resultType="Menu_info">
+		select * from menu_info where menu_id=#{menu_id}
+	</select>
+	<update id="update" parameterType="Menu_info">
+		update menu_info set prent_menu_id=#{prent_menu_id},menu_name=#{menu_name},menu_url=#{menu_url} where menu_id=#{menu_id}
+	</update>
+	<delete id="delete" parameterType="int">
+		delete from menu_info where menu_id=#{menu_id}
+	</delete>
+</mapper>

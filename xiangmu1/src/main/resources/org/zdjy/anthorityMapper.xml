@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zh.dao.AnthorityDao">
+	<select id="listAll" resultType="Role_info">
+		select * from role_info
+	</select>
+	<select id="like" parameterType="String" resultType="map">
+		select * from role_info where role_name like #{role_name}
+	</select>
+	<select id="findById" parameterType="int" resultType="Map">
+		select * from role_menu_info r,menu_info m where r.menu_id=m.menu_id and r.role_id=#{id} 
+	</select>
+	<select id="findAll" resultType="Menu_info">
+		select * from menu_info
+	</select>
+	<delete id="delete" parameterType="int">
+		delete from role_menu_info where role_id=#{role_id}
+	</delete>
+	<insert id="update" parameterType="Role_menu_info">
+		insert into role_menu_info (menu_id,role_id)values(#{menu_id},#{role_id})
+	</insert>
+	<select id="touXX" parameterType="int" resultType="Role_info" >
+		select * from role_info  where role_id=#{id}
+	</select>
+</mapper>
